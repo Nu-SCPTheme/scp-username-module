@@ -1,0 +1,9 @@
+<span class="printuser {{ avatar_hover }}">
+  {% if avatar_hover %}
+    <a href="/sys/user-info/{{ username }}" class="open-user-popup" id="{{ userid }}">{{ username }}>
+      <img class="small" src="{{ pfp_url }}" alt="" />
+    </a>
+  {% endif %}
+  <a href="/sys/user-info/{{ username }}" class="open-user-popup" id="{{ userid }}">{{ username }}</a>
+</span>
+
