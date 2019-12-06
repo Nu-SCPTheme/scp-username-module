@@ -25,49 +25,51 @@ extern crate wasm_bindgen;
 
 mod um_template;
 
-use askama::Template;
 use self::um_template::UserModuleTemplate;
-use serde::{Serialize, Deserialize};
+use askama::Template;
+use serde::{Deserialize, Serialize};
 use serde_json::from_str;
 use wasm_bindgen::prelude::*;
 
 // function to produce username module
 #[wasm_bindgen(js_name = createUsernameModule)]
 pub fn create_username_module(
-  userid: u64,
-  username: String,
-  profile_picture_url: Option<String>
+    userid: u64,
+    username: String,
+    profile_picture_url: Option<String>,
 ) -> Option<String> {
-  let purl: Option<&str> = match profile_picture_url {
-    Some(ref p) => Some(&p),
-    None => None
-  };
+    let purl: Option<&str> = match profile_picture_url {
+        Some(ref p) => Some(&p),
+        None => None,
+    };
 
-  match UserModuleTemplate::new(userid, &username, purl).render() {
-    Ok(x) => Some(x),
-    Err(e) => {
-      eprintln!("An error occurred while rendering the user module: {}", e);
-      None
+    match UserModuleTemplate::new(userid, &username, purl).render() {
+        Ok(x) => Some(x),
+        Err(e) => {
+            eprintln!("An error occurred while rendering the user module: {}", e);
+            None
+        }
     }
-  }
 }
 
 // functions to deserialize from json
 #[serde(rename_all = "kebab-case")]
 #[derive(Deserialize, Serialize)]
 pub struct UsernameModule {
-  pub userid: u64,
-  pub username: String,
-  pub profile_picture_url: Option<String>
+    pub userid: u64,
+    pub username: String,
+    pub profile_picture_url: Option<String>,
 }
 
 #[wasm_bindgen(js_name = deserializeUsernameModule)]
 pub fn deserialize_username_module(json: &str) -> Option<String> {
-  match from_str::<UsernameModule>(json) {
-    Ok(module) => create_username_module(module.userid, module.username, module.profile_picture_url),
-    Err(e) => {
-      eprintln!("An error occurred while deserializing from JSON: {}", e);
-      None
+    match from_str::<UsernameModule>(json) {
+        Ok(module) => {
+            create_username_module(module.userid, module.username, module.profile_picture_url)
+        }
+        Err(e) => {
+            eprintln!("An error occurred while deserializing from JSON: {}", e);
+            None
+        }
     }
-  }
 }

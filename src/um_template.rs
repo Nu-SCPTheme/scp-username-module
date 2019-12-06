@@ -24,33 +24,31 @@ use askama::Template;
 #[derive(Template)]
 #[template(path = "../templates/username_module.j2")]
 pub struct UserModuleTemplate<'a> {
-  avatar_hover: bool,
-  pfp_url: &'a str,
-  userid: u64, 
-  username: &'a str
+    avatar_hover: bool,
+    pfp_url: &'a str,
+    userid: u64,
+    username: &'a str,
 }
 
 // this second template runs the replacement for the avatar_template string only
 
 impl<'a> UserModuleTemplate<'a> {
-  pub fn new(userid: u64, username: &'a str, pfp_url: Option<&'a str>) -> UserModuleTemplate<'a> {
-    let mut avatar_hover = true;
-    let purl = match pfp_url {
-      Some(u) => {
-        u
-      },
-      None => {
-        avatar_hover = false;
-        ""
-      }
-    };
+    pub fn new(userid: u64, username: &'a str, pfp_url: Option<&'a str>) -> UserModuleTemplate<'a> {
+        let mut avatar_hover = true;
+        let purl = match pfp_url {
+            Some(u) => u,
+            None => {
+                avatar_hover = false;
+                ""
+            }
+        };
 
-    // instantiate new object
-    UserModuleTemplate {
-      avatar_hover: avatar_hover,
-      pfp_url: purl,
-      userid: userid,
-      username: username
+        // instantiate new object
+        UserModuleTemplate {
+            avatar_hover: avatar_hover,
+            pfp_url: purl,
+            userid: userid,
+            username: username,
+        }
     }
-  }
 }
