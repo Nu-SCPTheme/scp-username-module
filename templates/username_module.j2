@@ -1,6 +1,6 @@
 <span class="printuser {{ avatar_hover }}">
-  {% if avatar_hover %}
-    <a href="/sys/user-info/{{ username }}" class="open-user-popup" id="{{ userid }}">{{ username }}>
+  {% if do_avatar_hover %}
+    <a href="/sys/user-info/{{ username }}" class="open-user-popup" id="{{ userid }}">
       <img class="small" src="{{ pfp_url }}" alt="" />
     </a>
   {% endif %}

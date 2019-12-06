@@ -21,6 +21,7 @@ jobs:
       - cargo install wasm-pack
      script:
       - wasm-pack build --scope not_a_seagull
+      - wasm-pack test
    - stage: "Rust Build"
      rust:
       - stable
@@ -28,4 +29,4 @@ jobs:
       - nightly
      script:
       - cargo build
-     
+      - cargo test

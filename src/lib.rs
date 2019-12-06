@@ -31,7 +31,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::from_str;
 use wasm_bindgen::prelude::*;
 
-// function to produce username module
+/// Generates a username module from the user's id, name, and optionally their profile picture URL
 #[wasm_bindgen(js_name = createUsernameModule)]
 pub fn create_username_module(
     userid: u64,
@@ -52,7 +52,7 @@ pub fn create_username_module(
     }
 }
 
-// functions to deserialize from json
+/// A username module to deserialize from or to serialize to
 #[serde(rename_all = "kebab-case")]
 #[derive(Deserialize, Serialize)]
 pub struct UsernameModule {
@@ -61,6 +61,7 @@ pub struct UsernameModule {
     pub profile_picture_url: Option<String>,
 }
 
+/// Deserialize a username module into a string from JSON
 #[wasm_bindgen(js_name = deserializeUsernameModule)]
 pub fn deserialize_username_module(json: &str) -> Option<String> {
     match from_str::<UsernameModule>(json) {
