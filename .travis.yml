@@ -1,0 +1,31 @@
+dist: xenial
+language: rust
+rust:
+ - stable
+ - beta
+ - nightly
+
+matrix:
+  allowed_failures:
+   - rust: nightly
+  fast_finish: true
+
+cache:
+ - cargo
+
+jobs:
+  include:
+   - stage: "Wasm Build"
+     rust: stable
+     before_script:
+      - cargo install wasm-pack
+     script:
+      - wasm-pack build --scope not_a_seagull
+   - stage: "Rust Build"
+     rust:
+      - stable
+      - beta
+      - nightly
+     script:
+      - cargo build
+     
