@@ -2,8 +2,10 @@
 name = "scp_username_module"
 version = "0.1.0"
 authors = ["not_a_seagull <notaseagull048@gmail.com>"]
+description = "Cross-language module for generating Wikidot-like username modules"
 license = "AGPL-3.0"
 edition = "2018"
+repository = "https://github.com/Nu-SCPTheme/scp-username-module"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
