@@ -1,32 +1,44 @@
 dist: xenial
 language: rust
 rust:
- - stable
- - beta
- - nightly
+- stable
+- beta
+- nightly
 
 matrix:
   allowed_failures:
-   - rust: nightly
+  - rust: nightly
   fast_finish: true
 
 cache:
- - cargo
+- cargo
 
 jobs:
   include:
-   - stage: "Wasm Build"
-     rust: stable
-     before_script:
-      - cargo install wasm-pack
-     script:
-      - wasm-pack build --scope not_a_seagull
-      - wasm-pack test
-   - stage: "Rust Build"
-     rust:
-      - stable
-      - beta
-      - nightly
-     script:
-      - cargo build
-      - cargo test
+  - stage: Wasm Build
+    rust: stable
+    before_script:
+    - cargo install wasm-pack
+    script:
+    - wasm-pack build --scope not_a_seagull
+    - wasm-pack test
+  - stage: Rust Build
+    rust:
+    - stable
+    - beta
+    - nightly
+    script:
+    - cargo build
+    - cargo test
+    deploy: 
+      provider: cargo
+      token: $CARGO_API_TOKEN
+      edge: true
+      on:
+       rust: stable
+       tags: true
+
+
+env:
+  global:
+    secure: ogVT+c0KuPaPWsTDl0gnKWMcbUJEZYBR8ms3x2WxW4+pdpb4PWrWFO6llKCMFrUqLqaQsPnpHELWTWIj4g8WES2P29wNKdxABkM5qnzJEiHRGjRPcllSuEQqlUgOqFz5Q+TVNGpgRKxV9w/DWiIfaxX5FUeawNF5LHnOaW4RnEW1BCidmWqb44hNTlmIUwyb7a/NaMleHZ+PMjHAxnOmuXmuzDzTr6BAg2EDbDrdlUMtBQiEJoNXIp7oNoqvzz1GjgqNCPxODUzq/IqvlY7cF9rhDVhWDzkNmWuC0NgWD4CnNBYhWGWzPcozw+BYzoeK3FrHhEFPLBQAwg2iNmoFNuxR40fUiBrVIG2rN2SuXgf9z6Fznsdu84EMB2WUWgqdP3ZX64irDQR2kowfmaeNtLrdXDlXoMSq8UD+CVGZSPafLypP7FE5dDMmwtgBpXRhR5+rTOYltDVkuaChIfyLYSmk+jN21O5XA2i442zin/0rlV4m8iFh30sBSvJARQcdj0pZyYJPVsvTFsZBAWZS1c9r1C3oo/F04yQLHKV8p9Ckk0/sZqlDvcQ7JQbviDbCCxpiHMaXcBvTI20vexcJRVUrlqBAtib57PrG8WyV4QWDJe2ePUt01R/4FLe/gTvm6iqlusKojwyeqhrTKSHLMpf4kDXYLmsJmcwn3+03JyI=
