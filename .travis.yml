@@ -16,7 +16,7 @@ jobs:
     before_script:
     - cargo install wasm-pack
     script:
-    - wasm-pack build --scope not_a_seagull
+    - wasm-pack build
     - wasm-pack test
     before_deploy:
     - cd pkg
