@@ -4,25 +4,26 @@ rust:
 - stable
 - beta
 - nightly
-
-matrix:
-  allowed_failures:
-  - rust: nightly
-  fast_finish: true
+node_js: 10
 
 cache:
 - cargo
 
 jobs:
   include:
-  - stage: Wasm Build
+  - stage: "Wasm Build"
     rust: stable
     before_script:
     - cargo install wasm-pack
     script:
     - wasm-pack build --scope not_a_seagull
     - wasm-pack test
-  - stage: Rust Build
+    before_deploy:
+    - cd pkg
+    deploy:  
+      provider: npm
+      api_key: "$NPM_API_TOKEN"
+  - stage: "Rust Build"
     rust:
     - stable
     - beta
@@ -30,15 +31,17 @@ jobs:
     script:
     - cargo build
     - cargo test
-    deploy: 
+    deploy:
       provider: cargo
-      token: $CARGO_API_TOKEN
+      token: "$CARGO_API_TOKEN"
       edge: true
       on:
-       rust: stable
-       tags: true
-
+        rust: stable
+        tags: true
+  allowed_failures:
+  - rust: nightly
+  fast_finish: true
 
 env:
   global:
-    secure: ogVT+c0KuPaPWsTDl0gnKWMcbUJEZYBR8ms3x2WxW4+pdpb4PWrWFO6llKCMFrUqLqaQsPnpHELWTWIj4g8WES2P29wNKdxABkM5qnzJEiHRGjRPcllSuEQqlUgOqFz5Q+TVNGpgRKxV9w/DWiIfaxX5FUeawNF5LHnOaW4RnEW1BCidmWqb44hNTlmIUwyb7a/NaMleHZ+PMjHAxnOmuXmuzDzTr6BAg2EDbDrdlUMtBQiEJoNXIp7oNoqvzz1GjgqNCPxODUzq/IqvlY7cF9rhDVhWDzkNmWuC0NgWD4CnNBYhWGWzPcozw+BYzoeK3FrHhEFPLBQAwg2iNmoFNuxR40fUiBrVIG2rN2SuXgf9z6Fznsdu84EMB2WUWgqdP3ZX64irDQR2kowfmaeNtLrdXDlXoMSq8UD+CVGZSPafLypP7FE5dDMmwtgBpXRhR5+rTOYltDVkuaChIfyLYSmk+jN21O5XA2i442zin/0rlV4m8iFh30sBSvJARQcdj0pZyYJPVsvTFsZBAWZS1c9r1C3oo/F04yQLHKV8p9Ckk0/sZqlDvcQ7JQbviDbCCxpiHMaXcBvTI20vexcJRVUrlqBAtib57PrG8WyV4QWDJe2ePUt01R/4FLe/gTvm6iqlusKojwyeqhrTKSHLMpf4kDXYLmsJmcwn3+03JyI=
+    secure: GkoOH9HFRt2r0hOjzMOWj65fa27Tby/riKpWXskF5M6SwtRra4mbOmGq1V94fKAHE5IxvDjDYFY3On6KUtC21QRDMoNh2applnZFAj/PkMiPF6Qgc7Fs/lDrfT9CNg+aiAvjbGMro5kMk40jpJV8aGw0BwwqwPhCMSS/GYc+tG9YXNiZfte9LLqT7L7iIS2K0meo9p6H574TR9+ay+JwwD9EF9gUoy5fSXln6MHFW2RXdkEDzuVpMZf4eiiLmYL1E7XHs94LXBydEqIpvyWlG9STc9A1JqRWu6IGg67g9zhfsnzshtokrA2XNWlEmAVfhOYNFA52VmdGcKpYJinp1VGnpYBIL0EB6o3avsrZ0DnIvp6G6esGF5uTzjCr2wcH+8Rpoc/7fBVnzKKy3+RjavdMZ9IfXgvrrAhgbkMKmGpzN+7WYZQVjbPBVfK1Bntfr3fn8Vu8fBWnh99fLOPgMKK2DUslQpvupObMLO4uN5BgloLwsRtcKggEFQppZC2YRpAXLrfYr8z0dZTFyXTx2OVku4dWAuKsCJ+L69orwI53YaA1C8/qyyqIJia7cF7lhpyZ/e+DBbEBtN37r6MB5sUt/b/5ajkLxAiOq1TH0PDN8XcObU+dfoNEWcK5/kAgGnutKBCJzeapyYY7q9VZ8MNF/tFpGGIZXM/ywQ/w3jE=
