@@ -18,11 +18,6 @@ jobs:
     script:
     - wasm-pack build
     - wasm-pack test
-    before_deploy:
-    - cd pkg
-    deploy:  
-      provider: npm
-      api_key: "$NPM_API_TOKEN"
   - stage: "Rust Build"
     rust:
     - stable
@@ -31,17 +26,6 @@ jobs:
     script:
     - cargo build
     - cargo test
-    deploy:
-      provider: cargo
-      token: "$CARGO_API_TOKEN"
-      edge: true
-      on:
-        rust: stable
-        tags: true
   allowed_failures:
   - rust: nightly
   fast_finish: true
-
-env:
-  global:
-    secure: GkoOH9HFRt2r0hOjzMOWj65fa27Tby/riKpWXskF5M6SwtRra4mbOmGq1V94fKAHE5IxvDjDYFY3On6KUtC21QRDMoNh2applnZFAj/PkMiPF6Qgc7Fs/lDrfT9CNg+aiAvjbGMro5kMk40jpJV8aGw0BwwqwPhCMSS/GYc+tG9YXNiZfte9LLqT7L7iIS2K0meo9p6H574TR9+ay+JwwD9EF9gUoy5fSXln6MHFW2RXdkEDzuVpMZf4eiiLmYL1E7XHs94LXBydEqIpvyWlG9STc9A1JqRWu6IGg67g9zhfsnzshtokrA2XNWlEmAVfhOYNFA52VmdGcKpYJinp1VGnpYBIL0EB6o3avsrZ0DnIvp6G6esGF5uTzjCr2wcH+8Rpoc/7fBVnzKKy3+RjavdMZ9IfXgvrrAhgbkMKmGpzN+7WYZQVjbPBVfK1Bntfr3fn8Vu8fBWnh99fLOPgMKK2DUslQpvupObMLO4uN5BgloLwsRtcKggEFQppZC2YRpAXLrfYr8z0dZTFyXTx2OVku4dWAuKsCJ+L69orwI53YaA1C8/qyyqIJia7cF7lhpyZ/e+DBbEBtN37r6MB5sUt/b/5ajkLxAiOq1TH0PDN8XcObU+dfoNEWcK5/kAgGnutKBCJzeapyYY7q9VZ8MNF/tFpGGIZXM/ywQ/w3jE=
