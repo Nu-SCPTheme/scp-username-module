@@ -39,7 +39,7 @@ pub fn create_username_module(
     profile_picture_url: Option<String>,
 ) -> Option<String> {
     let purl: Option<&str> = match profile_picture_url {
-        Some(ref p) => Some(&p),
+        Some(ref p) => Some(p),
         None => None,
     };
 

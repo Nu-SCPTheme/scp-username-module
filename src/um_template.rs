@@ -22,7 +22,7 @@
 use askama::Template;
 
 #[derive(Template)]
-#[template(path = "../templates/username_module.j2", escape = "none")]
+#[template(path = "username_module.j2", escape = "none")]
 pub struct UserModuleTemplate<'a> {
     avatar_hover: &'a str,
     do_avatar_hover: bool,
@@ -33,53 +33,41 @@ pub struct UserModuleTemplate<'a> {
 
 impl<'a> UserModuleTemplate<'a> {
     pub fn new(userid: u64, username: &'a str, pfp_url: Option<&'a str>) -> UserModuleTemplate<'a> {
-        let mut avatar_hover = "avatar_hover";
-        let mut do_avatar_hover = true;
-        let purl = match pfp_url {
-            Some(u) => u,
-            None => {
-                avatar_hover = "";
-                do_avatar_hover = false;
-                ""
-            }
+        let (do_avatar_hover, pfp_url) = match pfp_url {
+            Some(u) => (true, u),
+            None => (false, "")
         };
 
         // instantiate new object
         UserModuleTemplate {
-            avatar_hover: avatar_hover,
+            avatar_hover: if do_avatar_hover { "iavatar_hover" } else { "" },
             do_avatar_hover: do_avatar_hover,
-            pfp_url: purl,
+            pfp_url: pfp_url,
             userid: userid,
             username: username,
         }
     }
 }
 
-#[cfg(test)]
-mod um_template_tests {
-  use askama::Template;
-  use super::UserModuleTemplate;
+#[test]
+fn no_pfp_test() {
+  let um = UserModuleTemplate::new(399, "not_a_seagull", None);
+  assert!(um.avatar_hover == "", "avatar_hover was not set to false");
+  
+  let text = um.render().unwrap();
+  println!("{}", text);
 
-  #[test]
-  fn no_pfp_test() {
-    let um = UserModuleTemplate::new(399, "not_a_seagull", None);
-    assert!(um.avatar_hover == "", "avatar_hover was not set to false");
-    
-    let text = um.render().unwrap();
-    println!("{}", text);
+  assert!(text.contains(r#"<a href="/sys/user-info/not_a_seagull" class="open-user-popup" id="399">not_a_seagull</a>"#));
+}
 
-    assert!(text.contains(r#"<a href="/sys/user-info/not_a_seagull" class="open-user-popup" id="399">not_a_seagull</a>"#));
-  }
+#[test]
+fn pfp_test() {
+  let um = UserModuleTemplate::new(399, "not_a_seagull", Some("/profile-pictures/399"));
+  assert!(um.avatar_hover == "avatar_hover");
 
-  #[test]
-  fn pfp_test() {
-    let um = UserModuleTemplate::new(399, "not_a_seagull", Some("/profile-pictures/399"));
-    assert!(um.avatar_hover == "avatar_hover");
-
-    let text = um.render().unwrap();
-    println!("{}", text);
+  let text = um.render().unwrap();
+  println!("{}", text);
    
-    assert!(text.contains(r#"<a href="/sys/user-info/not_a_seagull" class="open-user-popup" id="399">not_a_seagull</a>"#));
-    assert!(text.contains(r#"<img class="small" src="/profile-pictures/399" alt="" />"#));
-  }
+  assert!(text.contains(r#"<a href="/sys/user-info/not_a_seagull" class="open-user-popup" id="399">not_a_seagull</a>"#));
+  assert!(text.contains(r#"<img class="small" src="/profile-pictures/399" alt="" />"#));
 }
